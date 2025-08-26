@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>스톱워치</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .stopwatch-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    .time-display {
+      font-size: 48px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .start { background-color: #28a745; color: white; }
+    .pause { background-color: #f5deb3; }
+    .reset { background-color: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+  <div class="stopwatch-container">
+    <div class="time-display" id="display">00:00:00</div>
+    <div class="buttons">
+      <button class="start" id="startBtn">시작</button>
+      <button class="pause" id="pauseBtn" style="display: none;">일시 정지</button>
+      <button class="reset" id="resetBtn">리셋</button>
+    </div>
+  </div>
+
+  <script>
+    let seconds = 0;
+    let interval;
+    let isRunning = false;
+
+    const display = document.getElementById("display");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function formatTime(sec) {
+      const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+      const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    function updateDisplay() {
+      display.textContent = formatTime(seconds);
+    }
+
+    function startStopwatch() {
+      if (!isRunning) {
+        interval = setInterval(() => {
+          seconds++;
+          updateDisplay();
+        }, 1000);
+        isRunning = true;
+        startBtn.style.display = "none";
+        pauseBtn.style.display = "inline-block";
+      }
+    }
+
+    function pauseStopwatch() {
+      clearInterval(interval);
+      isRunning = false;
+      startBtn.style.display = "inline-block";
+      pauseBtn.style.display = "none";
+    }
+
+    function resetStopwatch() {
+      clearInterval(interval);
+      seconds = 0;
+      updateDisplay();
+      isRunning = false;
+      startBtn.style.display = "inline-block";
+      pauseBtn.style.display = "none";
+    }
+
+    startBtn.addEventListener("click", startStopwatch);
+    pauseBtn.addEventListener("click", pauseStopwatch);
+    resetBtn.addEventListener("click", resetStopwatch);
+
+    updateDisplay(); // 초기 표시
+  </script>
+</body>
+</html>
