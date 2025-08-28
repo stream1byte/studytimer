@@ -219,10 +219,9 @@
     let time = 30;
     let maxtime = 30;
     let totalTime = 1 ;
-    let timerInterval = 1;
+    let timerInterval ;
 
-   
-    
+
     const timeDisplay = document.getElementById("time");
     const button = document.querySelector(".start").style.display = 'none';
 
@@ -268,7 +267,9 @@
     const offset = circumference * (1 - percent / 100);
     circle.setAttribute("stroke-dashoffset", offset);
   }
+  
   var audio = new Audio("alarm-clock.mp3");
+
   function startTimer() {
     clearInterval(timerInterval);
     currentTime = totalTime;
@@ -279,25 +280,37 @@
       updateUI();
 
       if (currentTime <= 0) {
-        clearInterval(timerInterval);
-        alert("타이머 종료!");
-        audio.play();
+    	  audio.play().then(() => {
+    		  setTimeout(() => {
+    			alert("타이머 종료!");
+    		    audio.pause(); // ✅ 안전하게 일시정지
+    		  }, 2000); // 1초 후에 일시정지
+    		});
+          
+          clearInterval(timerInterval);
       }
     }, 1000);
   }
   function playTimer(){
 	  const startbutton = document.querySelector(".start").style.display = 'none';
 	  const pausebutton = document.querySelector(".pause").style.display = 'block';
+
+	  
 	  timerInterval = setInterval(() => {
 	      currentTime--;
 	      updateUI();
 
 	      if (currentTime <= 0) {
-	        clearInterval(timerInterval);
-	        alert("타이머 종료!");
-	        audio.play();
+	    	  audio.play().then(() => {
+	    		  setTimeout(() => {
+	    			alert("타이머 종료!");
+	    		    audio.pause(); // ✅ 안전하게 일시정지
+	    		  }, 2000); // 1초 후에 일시정지
+	    		});
+		        
+		        clearInterval(timerInterval);
 	      }
-	    }, 1000);
+	   }, 1000);
   }
 
   
@@ -309,7 +322,7 @@
 
 
 
-  function stopTimer() {
+  function timeset() {
 	  clearInterval(timerInterval);
 	  document.getElementById("timerbox").style.display = "block";
   	  document.getElementById("timercontainer").style.display = "none";
@@ -317,10 +330,14 @@
   }
   document.querySelector(".start").addEventListener("click", playTimer);
   document.querySelector(".pause").addEventListener("click", pauseTimer);
-  document.querySelector(".timeset").addEventListener("click", stopTimer);
+  document.querySelector(".timeset").addEventListener("click", timeset);
 
   // 자동 시작
   
+  
 </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6416003216944793"
+     crossorigin="anonymous"></script>
+  
 </body>
 </html>
